@@ -262,16 +262,16 @@ const ModulePageContent: React.FC<Props> = ({ module, archiveYear }) => {
           {/* Disabled for now because a new parser needs to be written to
           process the new updated requisite string. */}
 
-          {/* <section className={styles.section} id={SIDE_MENU_ITEMS.prerequisites}>
+          <section className={styles.section} id={SIDE_MENU_ITEMS.prerequisites}>
             <h2 className={styles.sectionHeading}>Prerequisite Tree</h2>
             <ErrorBoundary>
               <ModuleTree
                 moduleCode={moduleCode}
-                prereqTree={module.prereqTree}
+                prerequisiteRule={module.prerequisiteRule}
                 fulfillRequirements={module.fulfillRequirements}
               />
             </ErrorBoundary>
-          </section> */}
+          </section>
 
           <section className={styles.section} id={SIDE_MENU_ITEMS.prerequisites}>
             <h2 className={styles.sectionHeading}>Prerequisite Tree</h2>

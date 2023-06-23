@@ -12,6 +12,7 @@ type Props = {
   moduleCode: ModuleCode;
   fulfillRequirements?: readonly ModuleCode[];
   prereqTree?: PrereqTree;
+  prerequisiteRule?: string;
 };
 
 interface TreeDisplay {
@@ -26,6 +27,33 @@ const nodeName = (node: PrereqTree) => (typeof node === 'string' ? node : Object
 
 const unwrapLayer = (node: PrereqTree) =>
   typeof node === 'string' ? [node] : flatten(values(node).filter(notNull));
+
+const removeInitial = (node: string) => {
+  if (typeof node === 'string') {
+    return node
+      .substring(46)
+      .replace(/COURSES \((\d)\)/g, "$1")
+      .replace(/\(/g, "[")
+      .replace(/\)/g, "]")
+      .replace(/(\d)\s/g, "$1,")
+      .replaceAll(" AND ", ",AND,")
+      .replaceAll(" OR ", ",OR,")
+      .replaceAll(" ", ",")
+      .replaceAll(":D", "")
+      .split(",")
+      .filter((val) => val !== "");
+  } else {
+    return node;
+  } 
+} 
+
+const transformArray = (node: PrereqTree | undefined) => {
+  if (typeof node === 'string') {
+    return node;
+  } else {
+    return node;
+  }
+}
 
 const Branch: React.FC<{ nodes: PrereqTree[]; layer: number }> = (props) => (
   <ul className={styles.tree}>
@@ -65,7 +93,9 @@ const Tree: React.FC<TreeDisplay> = (props) => {
 };
 
 const ModuleTree: React.FC<Props> = (props) => {
-  const { fulfillRequirements, prereqTree, moduleCode } = props;
+  const { moduleCode, fulfillRequirements, prereqTree, prerequisiteRule } = props;
+
+  console.log(removeInitial(prerequisiteRule));
 
   return (
     <>
@@ -73,14 +103,15 @@ const ModuleTree: React.FC<Props> = (props) => {
         {fulfillRequirements && fulfillRequirements.length > 0 && (
           <>
             <ul className={styles.prereqTree}>
-              {fulfillRequirements.map((fulfilledModule) => (
+              {/* {fulfillRequirements.map((fulfilledModule) => (
                 <li
                   key={fulfilledModule}
                   className={classnames(styles.branch, styles.prereqBranch)}
                 >
                   <Tree layer={0} node={fulfilledModule} isPrereq />
                 </li>
-              ))}
+              ))} */}
+              test
             </ul>
 
             <div className={classnames(styles.node, styles.conditional)}>needs</div>
@@ -96,7 +127,7 @@ const ModuleTree: React.FC<Props> = (props) => {
         </ul>
       </div>
 
-      <p className="alert alert-warning">
+      <p className='alert alert-warning'>
         The prerequisite tree is displayed for visualization purposes and may not be accurate.
         Viewers are encouraged to double check details.
       </p>
